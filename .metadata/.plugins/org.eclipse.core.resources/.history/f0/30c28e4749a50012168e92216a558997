@@ -1,0 +1,52 @@
+package uk.ac.abdn.erg.iain.strigidoc;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+public class OWLData {
+
+	private OWLOntologyManager m;
+	private OWLOntology o;
+	
+	public OWLData(String iri) throws OWLOntologyCreationException, IOException {
+		
+		m = OWLManager.createOWLOntologyManager();
+		
+		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
+		
+	}
+	
+	 public void printOntology() {
+		 IRI ontologyIRI = o.getOntologyID().getOntologyIRI();
+		 IRI documentIRI = m.getOntologyDocumentIRI(o);
+		 System.out.println(ontologyIRI == null ? "anonymous" : ontologyIRI
+		 .toQuotedString());
+		 System.out.println(" from " + documentIRI.toQuotedString());
+		 } 
+	
+	 public static void main(String args[]) {
+		 
+		 try {
+			OWLData data = new OWLData("http://homepages.abdn.ac.uk/i.learmonth/pages/qunits/qunits.owl");
+			
+			data.printOntology();
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		 
+		 
+		 
+	 }
+	
+}
