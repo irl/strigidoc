@@ -1,0 +1,18 @@
+package uk.ac.abdn.erg.iain.strigidoc;
+
+public class OntologyPrinter {
+
+	public static void format(Ontology o) {
+		
+		for ( OntObject ob : o.classes )
+			System.out.println(OntObjectFormatter.format(ob));
+		for ( OntObject ob : o.objprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		for ( OntObject ob : o.dataprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		for ( OntObject ob : o.annprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		
+	}
+	
+}
