@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -40,13 +41,10 @@ public class Ontology {
 
 		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
 
-		this.iri = o.getOntologyID().getOntologyIRI().toString();
+		iri = o.getOntologyID().getOntologyIRI().toString();
 		abstr = getAbstract();
 		intro = getIntroduction();
 
-		contrib = getContributors();
-		imports = getImports();
-		
 		classes = getClasses();
 		dataprops = getDataProperties();
 		objprops = getObjectProperties();

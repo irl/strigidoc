@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -40,47 +41,72 @@ public class Ontology {
 
 		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
 
-		this.iri = o.getOntologyID().getOntologyIRI().toString();
+		iri = o.getOntologyID().getOntologyIRI().toString();
 		abstr = getAbstract();
 		intro = getIntroduction();
 
-		contrib = getContributors();
-		imports = getImports();
-		
 		classes = getClasses();
 		dataprops = getDataProperties();
 		objprops = getObjectProperties();
 		annprops = getAnnotationProperties();
 	}
 
-	private Set<String> getContributors() {
-		
-		HashSet<String> ret = new HashSet<String>();
-		
-		Set<OWLAnnotation> anns = o.getAnnotations();
-		
-		for (OWLAnnotation a : anns) {
+	public String getIntroductionValues() {
+		Set<OWLAnnotation> values = o.getAnnotations();
+		String introduction = "\\begin{description}\n";
+
+		// Ontology IRI
+		IRI ontologyIRI = o.getOntologyID().getOntologyIRI();
+
+		if (o != null) {
+			introduction += "\\item[Ontology IRI] \\hfill \\\\\n";
+			introduction += "\\url{" + ontologyIRI.toString() + "}\n";
+		}
+
+		// Ontology Authors
+		Set<String> authors = new HashSet<String>();
+
+		for (OWLAnnotation a : values) {
 			if (a.getProperty().getIRI().toString()
 					.equals("http://purl.org/dc/elements/1.1/creator")) {
-				ret.add(a.getValue().toString().replaceAll("\"", ""));
+				authors.add(a.getValue().toString().replaceAll("\"", ""));
 			}
 		}
-		
-		return ret;
-	}
-	
-	private Set<String> getImports() {
-		Set<OWLOntology> owlImports = o.getDirectImports();
-		Set<String> ret = new HashSet<String>();
-		
-		for ( OWLOntology im : owlImports ) {
-			ret.add(im.getOntologyID().getOntologyIRI().toString());
+
+		if (authors.size() > 0) {
+			introduction += "\\item[Authors] \\hfill \\\\\n";
+
+			for (String author : authors) {
+				if (author.contains("<")) {
+					author = author.substring(0, author.indexOf('<') - 1);
+				}
+
+				introduction += author + "\\\n";
+			}
+
 		}
-		
-		return ret;
+
+		// Ontology Imports
+		Set<OWLOntology> imports = o.getDirectImports();
+
+		if (imports.size() > 0) {
+			introduction += "\\item[Imported Ontologies] \\hfill \\\\\n";
+
+			for (OWLOntology im : imports) {
+				introduction += "\\url{" + im.getOntologyID().getOntologyIRI()
+						+ "}\\\n";
+			}
+
+		}
+
+		if (introduction.equals("\\begin{description}\n"))
+			return "% -- No introduction values available\n";
+		else
+			return introduction + "\\end{description}\n";
+
 	}
 
-	private String getAbstract() {
+	public String getAbstract() {
 
 		Set<OWLAnnotation> anns = o.getAnnotations();
 
@@ -98,7 +124,7 @@ public class Ontology {
 		return null;
 	}
 
-	private String getIntroduction() {
+	public String getIntroduction() {
 
 		Set<OWLAnnotation> anns = o.getAnnotations();
 
@@ -117,7 +143,7 @@ public class Ontology {
 		return null;
 	}
 
-	private Set<OntObject> getClasses() {
+	public Set<OntObject> getClasses() {
 
 		Set<OWLClass> owlClasses = o.getClassesInSignature();
 		Set<OntObject> ret = new HashSet<OntObject>();
@@ -133,7 +159,7 @@ public class Ontology {
 		return ret;
 	}
 
-	private Set<OntObject> getDataProperties() {
+	public Set<OntObject> getDataProperties() {
 
 		Set<OWLDataProperty> owlDataProperties = o
 				.getDataPropertiesInSignature();
@@ -151,7 +177,7 @@ public class Ontology {
 		return ret;
 	}
 
-	private Set<OntObject> getObjectProperties() {
+	public Set<OntObject> getObjectProperties() {
 
 		Set<OWLObjectProperty> owlObjectProperties = o
 				.getObjectPropertiesInSignature();
@@ -169,7 +195,7 @@ public class Ontology {
 		return ret;
 	}
 
-	private Set<OntObject> getAnnotationProperties() {
+	public Set<OntObject> getAnnotationProperties() {
 
 		Set<OWLAnnotationProperty> owlAnnotationProperties = o
 				.getAnnotationPropertiesInSignature();

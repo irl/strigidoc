@@ -1,12 +1,15 @@
 package uk.ac.abdn.erg.iain.strigidoc;
 
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLOntology;
+
 public class OntologyPrinter {
 
 	public static void print(Ontology o) {
 
 		System.out.println("\\begin{description}\n");
-		System.out.println("\\item[Ontology IRI] \\hfill \n");
-		System.out.println("\\url{" + o.iri + "}\\\\ ");
+		System.out.println("\\item[Ontology IRI] \\hfill \\\\\n");
+		System.out.println("\\url{" + ontologyIRI.toString() + "}\n");
 				
 		if (o.contrib.size() > 0) {
 			System.out.println("\\item[Authors] \\hfill \n");
@@ -15,16 +18,16 @@ public class OntologyPrinter {
 				if (author.contains("<")) {
 					author = author.substring(0, author.indexOf('<') - 1);
 				}
-				System.out.println(author + "\\\\ ");
+				System.out.println("\\\\" + author + "\n");
 			}
 
 		}
 		
 		if (o.imports.size() > 0) {
-			System.out.println("\\item[Imported Ontologies] \\hfill \n");
+			System.out.println("\\item[Imported Ontologies] \\hfill \\\\\n");
 
 			for (String im : o.imports) {
-				System.out.println("\\url{" + im + "}\\\\ ");
+				System.out.println("\\url{" + im + "}\\\n");
 			}
 		}
 		System.out.println("\\end{description}\n");
@@ -34,7 +37,6 @@ public class OntologyPrinter {
 		}
 		
 		if ( o.intro != null ) {
-			System.out.println("\\section{Introduction}\n\n");
 			System.out.println(o.intro);
 		}
 
