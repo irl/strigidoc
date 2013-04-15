@@ -1,0 +1,233 @@
+package uk.ac.abdn.erg.iain.strigidoc;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+public class Ontology {
+
+	private OWLOntologyManager m;
+	private OWLOntology o;
+
+	protected String iri;
+	protected String abstr = null;
+	protected String intro = null;
+	
+	protected Set<String> contrib;
+	protected Set<String> imports;
+	
+	protected Set<OntObject> classes;
+	protected Set<OntObject> objprops;
+	protected Set<OntObject> dataprops;
+	protected Set<OntObject> annprops;
+	
+	public Ontology(String iri) throws OWLOntologyCreationException, IOException {
+
+		m = OWLManager.createOWLOntologyManager();
+
+		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
+
+		iri = o.getOntologyID().getOntologyIRI().toString();
+		abstr = getAbstract();
+		intro = getIntroduction();
+		
+		classes = getClasses();
+		dataprops = getDataProperties();
+		objprops = getObjectProperties();
+		annprops = getAnnotationProperties();
+	}
+
+	public String getIntroductionValues() {
+		Set<OWLAnnotation> values = o.getAnnotations();
+		String introduction = "\\begin{description}\n";
+
+		// Ontology IRI
+		IRI ontologyIRI = o.getOntologyID().getOntologyIRI();
+
+		if (o != null) {
+			introduction += "\\item[Ontology IRI] \\hfill \\\\\n";
+			introduction += "\\url{" + ontologyIRI.toString() + "}\n";
+		}
+
+		// Ontology Authors
+		Set<String> authors = new HashSet<String>();
+
+		for (OWLAnnotation a : values) {
+			if (a.getProperty().getIRI().toString()
+					.equals("http://purl.org/dc/elements/1.1/creator")) {
+				authors.add(a.getValue().toString().replaceAll("\"", ""));
+			}
+		}
+
+		if (authors.size() > 0) {
+			introduction += "\\item[Authors] \\hfill \\\\\n";
+
+			for (String author : authors) {
+				if (author.contains("<")) {
+					author = author.substring(0, author.indexOf('<') - 1);
+				}
+
+				introduction += author + "\\\n";
+			}
+
+		}
+
+		// Ontology Imports
+		Set<OWLOntology> imports = o.getDirectImports();
+
+		if (imports.size() > 0) {
+			introduction += "\\item[Imported Ontologies] \\hfill \\\\\n";
+
+			for (OWLOntology im : imports) {
+				introduction += "\\url{" + im.getOntologyID().getOntologyIRI()
+						+ "}\\\n";
+			}
+
+		}
+
+		if (introduction.equals("\\begin{description}\n"))
+			return "% -- No introduction values available\n";
+		else
+			return introduction + "\\end{description}\n";
+
+	}
+
+	public String getAbstract() {
+
+		Set<OWLAnnotation> anns = o.getAnnotations();
+
+		for (OWLAnnotation a : anns) {
+
+			if (a.getProperty().getIRI().toString()
+					.equals("http://www.w3.org/2000/01/rdf-schema#comment")) {
+				String ret = a.getValue().toString();
+				ret = ret.substring(1, ret.length() - 1);
+				return ret;
+			}
+
+		}
+
+		return null;
+	}
+
+	public String getIntroduction() {
+	
+		Set<OWLAnnotation> anns = o.getAnnotations();
+	
+		for (OWLAnnotation a : anns) {
+	
+			if (a.getProperty().getIRI().toString()
+					.equals("http://purl.org/dc/elements/1.1/description")
+					&& (!a.getValue().toString().startsWith("http://"))) {
+				String ret = a.getValue().toString();
+				ret = ret.substring(1, ret.length() - 1);
+				return ret;
+			}
+	
+		}
+	
+		return null;
+	}
+
+	public static void main(String args[]) {
+
+		try {
+			Ontology data = new Ontology("http://homepages.abdn.ac.uk/i.learmonth/pages/qunits/qunits.owl");
+			
+			OntologyPrinter.print(data);
+			
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public Set<OntObject> getClasses() {
+
+		Set<OWLClass> owlClasses = o.getClassesInSignature();
+		Set<OntObject> ret = new HashSet<OntObject>();
+		
+		for (OWLClass c : owlClasses) {
+			if (!belongs((OWLEntity) c)) {
+				continue;
+			}
+			OntObject ob = OntObjectFactory.createFromClass(c, o);
+			ret.add(ob);
+		}
+		
+		return ret;
+	}
+
+	public Set<OntObject> getDataProperties() {
+
+		Set<OWLDataProperty> owlDataProperties = o.getDataPropertiesInSignature();
+		Set<OntObject> ret = new HashSet<OntObject>();
+		
+		for (OWLDataProperty p : owlDataProperties) {
+			if (!belongs((OWLEntity) p)) {
+				continue;
+			}
+			OntObject ob = OntObjectFactory.createFromProperty(OntObject.OntObjectType.DATA_PROPERTY, p, o);
+			ret.add(ob);
+		}
+		
+		return ret;
+	}
+	
+	public Set<OntObject> getObjectProperties() {
+
+		Set<OWLObjectProperty> owlObjectProperties = o.getObjectPropertiesInSignature();
+		Set<OntObject> ret = new HashSet<OntObject>();
+		
+		for (OWLObjectProperty p : owlObjectProperties) {
+			if (!belongs((OWLEntity) p)) {
+				continue;
+			}
+			OntObject ob = OntObjectFactory.createFromProperty(OntObject.OntObjectType.OBJECT_PROPERTY, p, o);
+			ret.add(ob);
+		}
+		
+		return ret;
+	}
+	
+	public Set<OntObject> getAnnotationProperties() {
+
+		Set<OWLAnnotationProperty> owlAnnotationProperties = o.getAnnotationPropertiesInSignature();
+		Set<OntObject> ret = new HashSet<OntObject>();
+		
+		for (OWLAnnotationProperty p : owlAnnotationProperties) {
+			if (!belongs((OWLEntity) p)) {
+				continue;
+			}
+			OntObject ob = OntObjectFactory.createFromAnnotationProperty(p, o);
+			ret.add(ob);
+		}
+		
+		return ret;
+	}
+	
+		private boolean belongs(OWLEntity e) {
+			return e.getIRI().toString().startsWith(o.getOntologyID().getOntologyIRI().toString());
+		}
+	
+}

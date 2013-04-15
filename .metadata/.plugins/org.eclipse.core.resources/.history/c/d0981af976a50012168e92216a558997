@@ -1,0 +1,37 @@
+package uk.ac.abdn.erg.iain.strigidoc;
+
+public class OntologyPrinter {
+
+	public static void print(Ontology o) {
+		
+		System.out.println(o.getIntroductionValues());
+		
+		System.out.println(o.getAbstract());
+		
+		System.out.println("\n\n\\section{Introduction}\n\n");
+		
+		System.out.println(o.getIntroduction());
+		
+		System.out.println("\\section{Classes}\n\n");
+		
+		for ( OntObject ob : o.classes )
+			System.out.println(OntObjectFormatter.format(ob));
+		
+		System.out.println("\\section{Object Properties}\n\n");
+		
+		for ( OntObject ob : o.objprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		
+		System.out.println("\\section{Data Properties}\n\n");
+		
+		for ( OntObject ob : o.dataprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		
+		System.out.println("\\section{Annotation Properties}\n\n");
+		
+		for ( OntObject ob : o.annprops )
+			System.out.println(OntObjectFormatter.format(ob));
+		
+	}
+	
+}
