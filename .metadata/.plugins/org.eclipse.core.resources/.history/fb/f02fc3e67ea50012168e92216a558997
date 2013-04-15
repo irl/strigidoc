@@ -34,7 +34,7 @@ public class OntologyPrinter {
 		}
 		
 		if ( o.intro != null ) {
-			System.out.println("\\section{Introduction}\n\n");
+			System.out.println("\\section{Introduction}\n\n")
 			System.out.println(o.intro);
 		}
 
