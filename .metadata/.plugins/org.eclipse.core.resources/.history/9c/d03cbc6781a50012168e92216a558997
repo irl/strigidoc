@@ -2,6 +2,7 @@ package uk.ac.abdn.erg.iain.strigidoc;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashSet;
@@ -40,7 +41,7 @@ public class Ontology {
 
 		m = OWLManager.createOWLOntologyManager();
 
-		o = m.loadOntologyFromOntologyDocument(getOntologyInputStream(iri));
+		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
 
 		this.iri = o.getOntologyID().getOntologyIRI().toString();
 		abstr = getAbstract();

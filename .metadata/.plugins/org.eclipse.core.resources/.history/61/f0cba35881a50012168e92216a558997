@@ -1,9 +1,7 @@
 package uk.ac.abdn.erg.iain.strigidoc;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,7 +38,7 @@ public class Ontology {
 
 		m = OWLManager.createOWLOntologyManager();
 
-		o = m.loadOntologyFromOntologyDocument(getOntologyInputStream(iri));
+		o = m.loadOntologyFromOntologyDocument(new URL(iri).openStream());
 
 		this.iri = o.getOntologyID().getOntologyIRI().toString();
 		abstr = getAbstract();
@@ -55,20 +53,6 @@ public class Ontology {
 		annprops = getAnnotationProperties();
 	}
 
-	private InputStream getOntologyInputStream(String iri) throws IOException {
-		
-		String accept = "application/rdf+xml, application/xml;q=0.6, text/xml;q=0.6";
-		
-		URL address = new URL(iri);
-		URLConnection cnx = address.openConnection();
-		cnx.setAllowUserInteraction(false);         
-		cnx.setDoOutput(true);
-		cnx.addRequestProperty("Accept", accept);
-		InputStream is = cnx.getInputStream();
-		
-		return is;
-	}
-	
 	private Set<String> getContributors() {
 		
 		HashSet<String> ret = new HashSet<String>();

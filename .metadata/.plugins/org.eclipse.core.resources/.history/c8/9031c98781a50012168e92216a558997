@@ -9,10 +9,13 @@ public class StrigiDoc {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+		
 		try {
 			Ontology data = new Ontology(args[0]);
+
 			OntologyPrinter.print(data);
+
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -20,6 +23,7 @@ public class StrigiDoc {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 	}
 
 }
