@@ -19,8 +19,9 @@
         <h2>A LaTeX documentation generator for OWL ontologies</h2>
 
         <section id="downloads">
-          <a href="https://github.com/irl/strigidoc/zipball/master" class="btn">Download as .zip</a>
-          <a href="https://github.com/irl/strigidoc/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/irl/strigidoc/zipball/master" class="btn">Sources as .zip</a>
+          <a href="https://github.com/irl/strigidoc/tarball/master" class="btn">Sources as .tar.gz</a>
+          <a href="http://homepages.abdn.ac.uk/i.learmonth/pages/strigidoc.jar" class="btn">Binary as .jar</a>
           <a href="https://github.com/irl/strigidoc" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
       </div>
@@ -28,7 +29,15 @@
 
     <div class="container">
       <section id="main_content">
-        <p>A work in progress. Definitely not ready for anything serious.</p>
+        <h3>Instructions for use</h3>
+
+<p>You can download the compiled Java archive above (.jar). The JAR file should be run with a single command line argument, the URL to the ontology you would like documented. The LaTeX output appears on the standard output and can be saved using output redirection. For example:</p>
+
+<pre>java -jar strigidoc.jar "http://homepages.abdn.ac.uk/i.learmonth/pages/qunits/#" > qunits.tex</pre>
+
+<p>Currently, you must use a URL and cannot use local files. This may or may not get fixed depending on how many people harass me about it.</p>
+
+<h3>License Details</h3>
 
 <p>All source code and this website (C) Iain R. Learmonth 2013.</p>
 
