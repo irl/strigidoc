@@ -36,6 +36,8 @@ public class OntologyFormatter {
 
 			case LATEX:
 				return formatAsLatex(o);
+			case LATEX_COMPLETE:
+				return formatAsLatexComplete(o);
 
 		}
 
