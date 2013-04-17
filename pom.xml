@@ -26,7 +26,7 @@
   </properties>
 
   <build>
-    <sourceDirectory>StrigiDoc/src</sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
     <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
