@@ -29,7 +29,65 @@ import org.semanticweb.owlapi.model.OWLObject;
 
 public class OntObjectFormatter {
 
-	public static String format(OntObject o) {
+	public static String format(OntObject o, OntologyFormatter.OutputType outputType) {
+
+		switch ( outputType ) {
+			case LATEX:
+			case LATEX_COMPLETE:
+				return formatAsLatex(o);
+			case RESTRUCTUREDTEXT:
+				return formatAsReStructuredText(o);
+		}
+
+		return null;
+
+	}
+
+	private static String formatAsReStructuredText(OntObject o) {
+
+		String ret = "";
+
+		// Start with a heading for the object
+
+		String heading;
+
+		if (o.getLabel() != null) {
+			heading = o.getLabel();
+			
+		} else {
+			heading = o.getFragment();
+		}
+
+		ret += "\n" + heading + "\n";
+
+		for ( int i = 0 ; i < heading.length() ; ++i ) {
+			ret += "-";
+		}
+
+		ret += "\n\n";
+
+		// With the object's IRI
+		
+		ret += ":" + o.getType().nom() + " IRI: " + o.getIRIString() + "\n\n";
+		
+		// With the object's super objects
+		
+		ret += formatRelatedObjectsAsReStructuredText(o, true);
+		
+		// With the object's sub objects
+		
+		ret += formatRelatedObjectsAsReStructuredText(o, false);
+		
+		// Add the comment if present
+		
+		if ( o.getComment() != null ) {
+			ret += o.getComment() + "\n\n";
+		}
+		
+		return ret;
+	}
+
+	private static String formatAsLatex(OntObject o) {
 
 		String ret;
 
@@ -52,11 +110,11 @@ public class OntObjectFormatter {
 		
 		// With the object's super objects
 		
-		ret += formatRelatedObjects(o, true);
+		ret += formatRelatedObjectsAsLatex(o, true);
 		
 		// With the object's sub objects
 		
-		ret += formatRelatedObjects(o, false);
+		ret += formatRelatedObjectsAsLatex(o, false);
 		
 		// End the detail section
 		
@@ -70,18 +128,28 @@ public class OntObjectFormatter {
 		
 		return ret;
 	}
-	
-	public static String asString(OWLObject value) {
-		if (value instanceof OWLLiteral) {				
-			return ((OWLLiteral)value).getLiteral();
-		} else {
-			// Silly fallback
-			return value.toString();
-		}
-	}
-	
 
-	private static String formatRelatedObjects(OntObject o, boolean sup) {
+	private static String formatRelatedObjectsAsReStructuredText(OntObject o, boolean sup) {
+		
+		String rel = ( sup ) ? "Super-" : "Sub-";
+		Set<String> obs = ( sup ) ? o.getSupers() : o.getSubs();
+		
+		if ( obs.size() == 0 ) {
+			return "";
+		}
+		
+		String ret = rel + o.getType().shortPlural() + "\n\n";
+
+		for ( String i : obs ) {
+			ret += " - " + i + "\n";
+		}
+
+		ret += "\n";
+		
+		return ret;
+	}
+
+	private static String formatRelatedObjectsAsLatex(OntObject o, boolean sup) {
 		
 		String rel = ( sup ) ? "Super-" : "Sub-";
 		Set<String> obs = ( sup ) ? o.getSupers() : o.getSubs();
@@ -98,4 +166,14 @@ public class OntObjectFormatter {
 		
 		return ret;
 	}
+
+	public static String asString(OWLObject value) {
+		if (value instanceof OWLLiteral) {				
+			return ((OWLLiteral)value).getLiteral();
+		} else {
+			// Silly fallback
+			return value.toString();
+		}
+	}
+
 }

@@ -87,28 +87,28 @@ public class OntologyFormatter {
 			ret += "=======\n\n";
 			
 			for (OntObject ob : o.classes)
-				ret += OntObjectFormatter.format(ob) + "\n";
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.RESTRUCTUREDTEXT) + "\n";
 		}
 		if (o.objprops.size() > 0) {
 			ret += "\nObject Properties\n";
 			ret += "=================\n\n";
 
 			for (OntObject ob : o.objprops)
-				ret += OntObjectFormatter.format(ob) + "\n";
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.RESTRUCTUREDTEXT) + "\n";
 		}
 		if (o.dataprops.size() > 0) {
 			ret += "\nData Properties\n";
 			ret += "===============\n\n";
 
 			for (OntObject ob : o.dataprops)
-				ret += OntObjectFormatter.format(ob) + "\n";
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.RESTRUCTUREDTEXT) + "\n";
 		}
 		if (o.annprops.size() > 0) {
 			ret += "\nAnnotation Properties\n";
 			ret += "=====================\n\n";
 
 			for (OntObject ob : o.annprops)
-				ret += OntObjectFormatter.format(ob) + "\n";
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.RESTRUCTUREDTEXT) + "\n";
 		}
 
 		return ret;
@@ -157,25 +157,25 @@ public class OntologyFormatter {
 			ret += "\\section{Classes}\n\n";
 			
 			for (OntObject ob : o.classes)
-				ret += OntObjectFormatter.format(ob);
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.LATEX);
 		}
 		if (o.objprops.size() > 0) {
 			ret += "\\section{Object Properties}\n\n";
 
 			for (OntObject ob : o.objprops)
-				ret += OntObjectFormatter.format(ob);
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.LATEX);
 		}
 		if (o.dataprops.size() > 0) {
 			ret += "\\section{Data Properties}\n\n";
 
 			for (OntObject ob : o.dataprops)
-				ret += OntObjectFormatter.format(ob);
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.LATEX);
 		}
 		if (o.annprops.size() > 0) {
 			ret += "\\section{Annotation Properties}\n\n";
 
 			for (OntObject ob : o.annprops)
-				ret += OntObjectFormatter.format(ob);
+				ret += OntObjectFormatter.format(ob, OntologyFormatter.OutputType.LATEX);
 		}
 
 		return ret;
