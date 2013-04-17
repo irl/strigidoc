@@ -26,10 +26,16 @@ import java.io.IOException;
 
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
+/**
+ * The main application class
+ */
 public class StrigiDoc {
 
 	/**
-	 * @param args
+	 * StrigiDoc application that takes an OWL ontology URI on the command line
+	 * and prints LaTeX output on standard output.
+	 *
+	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 
@@ -50,6 +56,9 @@ public class StrigiDoc {
 		}
 	}
 
+	/**
+	 * Prints usage instructions to the terminal
+	 */
 	private static void printUsage() {
 		System.out.println("StrigiDoc Copyright (C) 2013 Iain R. Learmonth and contributors");
 		System.out.println("");
