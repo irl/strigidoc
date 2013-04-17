@@ -93,6 +93,9 @@ public class OntObject {
 	}
 	
 	public enum OntObjectType {
+		/**
+		 * Instance of owl:Class
+		 */
 		CLASS() {
 			public String nom() {
 				return "Class";
@@ -101,6 +104,9 @@ public class OntObject {
 				return "Classes";
 			}
 		},
+		/**
+		 * Instance of owl:DatatypeProperty
+		 */
 		DATA_PROPERTY() {
 			public String nom() {
 				return "Data Property";
@@ -109,6 +115,9 @@ public class OntObject {
 				return "Properties";
 			}
 		},
+		/**
+		 * Instance of owl:ObjectProperty
+		 */
 		OBJECT_PROPERTY() {
 			public String nom() {
 				return "Object Property";
@@ -117,6 +126,9 @@ public class OntObject {
 				return "Properties";
 			}
 		},
+		/**
+		 * Instance of owl:AnnotationProperty
+		 */
 		ANNOTATION_PROPERTY() {
 			public String nom() {
 				return "Annotation Property";
@@ -125,8 +137,19 @@ public class OntObject {
 				return "Properties";
 			}
 		};
-		
+	
+		/**
+		 * Returns a human readable name of the type
+		 *
+		 * @return a human readable name of the type
+		 */
 		public abstract String nom();
+
+		/**
+		 * Returns a short human readable name of the type in plural form
+		 *
+		 * @return a short human readable name of the type in plural form
+		 */
 		public abstract String shortPlural();
 	}
 	
