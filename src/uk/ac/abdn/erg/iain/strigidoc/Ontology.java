@@ -48,6 +48,7 @@ public class Ontology {
 	private OWLOntology o;
 
 	protected String iri;
+	protected String title = null;
 	protected String abstr = null;
 	protected String intro = null;
 
@@ -67,6 +68,7 @@ public class Ontology {
 		o = m.loadOntologyFromOntologyDocument(getOntologyInputStream(iri));
 
 		this.iri = o.getOntologyID().getOntologyIRI().toString();
+		title = getTitle();
 		abstr = getAbstract();
 		intro = getIntroduction();
 
@@ -120,6 +122,22 @@ public class Ontology {
 		}
 		
 		return ret;
+	}
+
+	private String getTitle() {
+
+		Set<OWLAnnotation> anns = o.getAnnotations();
+
+		for (OWLAnnotation a : anns) {
+
+			if (a.getProperty().getIRI().toString()
+					.equals("http://purl.org/dc/elements/1.1/title")) {
+				return asString(a.getValue());
+			}
+
+		}
+
+		return null;
 	}
 
 	private String getAbstract() {

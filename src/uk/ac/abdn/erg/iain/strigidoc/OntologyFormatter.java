@@ -51,7 +51,17 @@ public class OntologyFormatter {
 
 		String ret = "";
 
-		ret += ":Ontology IRI: " + o.iri + "\n";
+		for ( int i = 0 ; i < o.title.length() ; ++i ) {
+			ret += "=";
+		}
+
+		ret += "\n" + o.title + "\n";
+
+		for ( int i = 0 ; i < o.title.length() ; ++i ) {
+			ret += "=";
+		}
+
+		ret += "\n\n:Ontology IRI: " + o.iri + "\n";
 			
 		if (o.contrib.size() > 0) {
 			ret += "\nAuthors\n";
@@ -184,7 +194,9 @@ public class OntologyFormatter {
 
 	public static String formatAsLatexComplete(Ontology o) {
 
-		String ret = "\\documentclass{scrartcl}\n\\usepackage{url}\n\\begin{document}\n";
+		String ret = "\\documentclass{scrreprt}\n\\usepackage{url}\n\\begin{document}\n";
+
+		ret += "\\chapter{" + o.title + "}\n";
 
 		ret += formatAsLatex(o);
 
