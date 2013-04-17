@@ -1,5 +1,7 @@
 package uk.ac.abdn.erg.iain.strigidoc;
 
+import static uk.ac.abdn.erg.iain.strigidoc.OntObjectFormatter.asString;
+
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -73,14 +75,12 @@ public class OntObjectFactory {
 		
 		Set<OWLAnnotation> anns = e.getAnnotations(o);
 		
-		for ( OWLAnnotation a : anns ) {
+		for (OWLAnnotation a : anns) {
 			if (a.getProperty().getIRI().toString()
 					.equals("http://www.w3.org/2000/01/rdf-schema#comment")) {
-					String comment = a.getValue().toString();
-					comment = comment.substring(1, comment.length() - 1);
-					ob.setComment(comment);
-					break;
-				}
+				ob.setComment(asString(a.getValue()));
+				break;
+			}
 		}
 		
 		return ob;

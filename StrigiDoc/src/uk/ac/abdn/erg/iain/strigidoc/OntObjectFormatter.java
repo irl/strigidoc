@@ -2,6 +2,9 @@ package uk.ac.abdn.erg.iain.strigidoc;
 
 import java.util.Set;
 
+import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLObject;
+
 public class OntObjectFormatter {
 
 	public static String format(OntObject o) {
@@ -45,6 +48,16 @@ public class OntObjectFormatter {
 		
 		return ret;
 	}
+	
+	public static String asString(OWLObject value) {
+		if (value instanceof OWLLiteral) {				
+			return ((OWLLiteral)value).getLiteral();
+		} else {
+			// Silly fallback
+			return value.toString();
+		}
+	}
+	
 
 	private static String formatRelatedObjects(OntObject o, boolean sup) {
 		

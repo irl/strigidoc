@@ -1,5 +1,7 @@
 package uk.ac.abdn.erg.iain.strigidoc;
 
+import static uk.ac.abdn.erg.iain.strigidoc.OntObjectFormatter.asString;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -78,12 +80,14 @@ public class Ontology {
 		for (OWLAnnotation a : anns) {
 			if (a.getProperty().getIRI().toString()
 					.equals("http://purl.org/dc/elements/1.1/creator")) {
-				ret.add(a.getValue().toString().replaceAll("\"", ""));
+				ret.add(asString(a.getValue()));
 			}
 		}
 		
 		return ret;
 	}
+
+
 	
 	private Set<String> getImports() {
 		Set<OWLOntology> owlImports = o.getDirectImports();
@@ -104,9 +108,7 @@ public class Ontology {
 
 			if (a.getProperty().getIRI().toString()
 					.equals("http://www.w3.org/2000/01/rdf-schema#comment")) {
-				String ret = a.getValue().toString();
-				ret = ret.substring(1, ret.length() - 1);
-				return ret;
+				return asString(a.getValue());
 			}
 
 		}
@@ -119,15 +121,10 @@ public class Ontology {
 		Set<OWLAnnotation> anns = o.getAnnotations();
 
 		for (OWLAnnotation a : anns) {
-
 			if (a.getProperty().getIRI().toString()
-					.equals("http://purl.org/dc/elements/1.1/description")
-					&& (!a.getValue().toString().startsWith("http://"))) {
-				String ret = a.getValue().toString();
-				ret = ret.substring(1, ret.length() - 1);
-				return ret;
+					.equals("http://purl.org/dc/elements/1.1/description")) {
+				return asString(a.getValue());
 			}
-
 		}
 
 		return null;
