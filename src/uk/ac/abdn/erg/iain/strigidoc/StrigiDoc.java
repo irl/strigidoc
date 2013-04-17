@@ -60,11 +60,11 @@ public class StrigiDoc {
 	 * Prints usage instructions to the terminal
 	 */
 	private static void printUsage() {
-		System.out.println("StrigiDoc Copyright (C) 2013 Iain R. Learmonth and contributors");
-		System.out.println("");
-		System.out.println("Usage:");
-		System.out.println("    java -jar strigidoc-*-standalone.jar URI > output.tex");
-		System.out.println("");
+		System.err.println("StrigiDoc Copyright (C) 2013 Iain R. Learmonth and contributors");
+		System.err.println("");
+		System.err.println("Usage:");
+		System.err.println("    java -jar strigidoc-*-standalone.jar URI > output.tex");
+		System.err.println("");
 	}
 
 }
