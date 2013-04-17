@@ -52,7 +52,7 @@ public class StrigiDoc {
 		
 		Option output = OptionBuilder.withArgName("output")
 					.hasArg()
-					.withDescription("the output format (latex/clatex)")
+					.withDescription("the output format (latex/clatex/rst)")
 					.create("output");
 
 		options.addOption(output);
@@ -81,6 +81,8 @@ public class StrigiDoc {
 				outputValue = OntologyFormatter.OutputType.LATEX;
 			} else if ( outputString.equals("clatex") ) {
 				outputValue = OntologyFormatter.OutputType.LATEX_COMPLETE;
+			} else if ( outputString.equals("rst") ) {
+				outputValue = OntologyFormatter.OutputType.RESTRUCTUREDTEXT;
 			} else {
 				printUsage(options);
 				return;

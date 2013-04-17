@@ -38,10 +38,80 @@ public class OntologyFormatter {
 				return formatAsLatex(o);
 			case LATEX_COMPLETE:
 				return formatAsLatexComplete(o);
+			case RESTRUCTUREDTEXT:
+				return formatAsReStructuredText(o);
 
 		}
 
 		return null;
+
+	}
+
+	private static String formatAsReStructuredText(Ontology o) {
+
+		String ret = "";
+
+		ret += ":Ontology IRI: " + o.iri + "\n";
+			
+		if (o.contrib.size() > 0) {
+			ret += "\nAuthors\n";
+			for (String author : o.contrib ) {
+				if (author.contains("<")) {
+					author = author.substring(0, author.indexOf('<') - 1);
+				}
+				ret += "- " + author + "\n";
+			}
+
+		}
+		
+		if (o.imports.size() > 0) {
+			ret += "\nImported Ontologies \n";
+
+			for (String im : o.imports) {
+				ret += "- " + im + "\n";
+			}
+		}
+
+		if ( o.abstr != null ) {
+			ret += "\n" + o.abstr + "\n";
+		}
+		
+		if ( o.intro != null ) {
+			ret += "\nIntroduction\n";
+			ret += "============\n\n";
+			ret += o.intro + "\n";
+		}
+
+		if (o.classes.size() > 0) {
+			ret += "\nClasses\n";
+			ret += "=======\n\n";
+			
+			for (OntObject ob : o.classes)
+				ret += OntObjectFormatter.format(ob) + "\n";
+		}
+		if (o.objprops.size() > 0) {
+			ret += "\nObject Properties\n";
+			ret += "=================\n\n";
+
+			for (OntObject ob : o.objprops)
+				ret += OntObjectFormatter.format(ob) + "\n";
+		}
+		if (o.dataprops.size() > 0) {
+			ret += "\nData Properties\n";
+			ret += "===============\n\n";
+
+			for (OntObject ob : o.dataprops)
+				ret += OntObjectFormatter.format(ob) + "\n";
+		}
+		if (o.annprops.size() > 0) {
+			ret += "\nAnnotation Properties\n";
+			ret += "=====================\n\n";
+
+			for (OntObject ob : o.annprops)
+				ret += OntObjectFormatter.format(ob) + "\n";
+		}
+
+		return ret;
 
 	}
 
@@ -136,7 +206,11 @@ public class OntologyFormatter {
 		/**
 		 * Output as complete LaTeX document
 		 */
-		LATEX_COMPLETE;
+		LATEX_COMPLETE,
+		/**
+		 * Output as reStructuredText
+		 */
+		RESTRUCTUREDTEXT;
 
 	}
 
