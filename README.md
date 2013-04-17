@@ -12,10 +12,11 @@ You can build a JAR file from source by running:
     cd strigidoc
     mvn package
 
-This produces three JAR files in the target/ directory.
+This produces four JAR files in the target/ directory.
 
  * strigidoc-0.1-SNAPSHOT.jar - Compiled source for use as a library
  * strigidoc-0.1-SNAPSHOT-sources.jar - Sources archive
+ * strigidoc-0.1-SNAPSHOT-javadoc.jar - JavaDoc archive
  * strigidoc-0.1-SNAPSHOT-standalone.jar - Standalone runnable JAR file
 
 Using the pre-built binary
