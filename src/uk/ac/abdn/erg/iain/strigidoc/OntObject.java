@@ -113,7 +113,7 @@ public class OntObject {
 	/**
 	 * Set a comment for the object, typically a value from dc:comment
 	 *
-	 * @param the object's comment
+	 * @param comment the object's comment
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
@@ -122,7 +122,7 @@ public class OntObject {
 	/**
 	 * Add a super-object IRI
 	 *
-	 * @param sub the super-object's IRI
+	 * @param sup the super-object's IRI
 	 */	
 	public void addSuper(String sup) {
 		this.sup.add(sup);
