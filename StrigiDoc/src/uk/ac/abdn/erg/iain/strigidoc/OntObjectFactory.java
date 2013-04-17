@@ -7,6 +7,7 @@ import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLEntity;
+import org.semanticweb.owlapi.model.OWLObject;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLProperty;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
@@ -19,12 +20,12 @@ public class OntObjectFactory {
 		Set<OWLClassExpression> sup = c.getSuperClasses(o);
 		Set<OWLClassExpression> sub = c.getSubClasses(o);
 		
-		for ( OWLClassExpression s : sup ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, true);
+		for ( OWLClassExpression s : sup ) {			
+			checkAndAddRelated(ob, s, o, true);
 		}
 		
 		for ( OWLClassExpression s : sub ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, false);
+			checkAndAddRelated(ob, s, o, false);
 		}
 		
 		return ob;
@@ -38,11 +39,11 @@ public class OntObjectFactory {
 		Set<OWLPropertyExpression> sub = p.getSubProperties(o);
 		
 		for ( OWLPropertyExpression s : sup ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, true);
+			checkAndAddRelated(ob, s, o, true);
 		}
 		
 		for ( OWLPropertyExpression s : sub ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, false);
+			checkAndAddRelated(ob, s, o, false);
 		}
 		
 		return ob;
@@ -56,11 +57,11 @@ public class OntObjectFactory {
 		Set<OWLAnnotationProperty> sub = p.getSubProperties(o);
 		
 		for ( OWLAnnotationProperty s : sup ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, true);
+			checkAndAddRelated(ob, s, o, true);
 		}
 		
 		for ( OWLAnnotationProperty s : sub ) {
-			checkAndAddRelated(ob, (OWLEntity) s, o, false);
+			checkAndAddRelated(ob, s, o, false);
 		}
 		
 		return ob;
@@ -86,12 +87,16 @@ public class OntObjectFactory {
 		return ob;
 	}
 	
-	private static boolean checkAndAddRelated(OntObject ob, OWLEntity e, OWLOntology o, boolean sup) {
+	private static boolean checkAndAddRelated(OntObject ob, OWLObject s, OWLOntology o, boolean sup) {
+		if(! (s instanceof OWLEntity)) {
+			return false;
+		}
+		OWLEntity entity = (OWLEntity) s;
 		if ( ob.getIRIString().startsWith(o.getOntologyID().getOntologyIRI().toString()) ) {
 			if ( sup ) {
-				ob.addSuper(e.getIRI().toString());
+				ob.addSuper(entity.getIRI().toString());
 			} else {
-				ob.addSub(e.getIRI().toString());
+				ob.addSub(entity.getIRI().toString());
 			}
 			return true;
 		} else {
