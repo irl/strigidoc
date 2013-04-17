@@ -31,7 +31,13 @@ public class StrigiDoc {
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {	
+	public static void main(String[] args) {
+
+		if ( args.length < 1 ) {
+			printUsage();
+			return;
+		}
+
 		try {
 			Ontology data = new Ontology(args[0]);
 			OntologyPrinter.print(data);
@@ -42,6 +48,14 @@ public class StrigiDoc {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	private static void printUsage() {
+		System.out.println("StrigiDoc Copyright (C) 2013 Iain R. Learmonth and contributors");
+		System.out.println("");
+		System.out.println("Usage:");
+		System.out.println("    java -jar strigidoc-*-standalone.jar URI > output.tex");
+		System.out.println("");
 	}
 
 }
