@@ -24,6 +24,15 @@ package uk.ac.abdn.erg.iain.strigidoc;
 
 import java.io.IOException;
 
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.GnuParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 /**
@@ -39,14 +48,51 @@ public class StrigiDoc {
 	 */
 	public static void main(String[] args) {
 
-		if ( args.length < 1 ) {
-			printUsage();
+		Options options = new Options();
+		
+		Option output = OptionBuilder.withArgName("output")
+					.hasArg()
+					.withDescription("the output format (latex/clatex)")
+					.create("output");
+
+		options.addOption(output);
+
+		CommandLineParser parser = new GnuParser();
+		CommandLine cmd = null;
+
+		try {
+			cmd = parser.parse(options, args);
+		} catch (ParseException e) {
+			printUsage(options);
 			return;
 		}
 
+		if ( cmd.getArgs().length != 1 ) {
+			printUsage(options);
+			return;
+		}
+
+		OntologyFormatter.OutputType outputValue;
+
+		if ( cmd.hasOption("output") ) {
+			String outputString = cmd.getOptionValue("output");
+
+			if ( outputString.equals("latex") ) {
+				outputValue = OntologyFormatter.OutputType.LATEX;
+			} else if ( outputString.equals("clatex") ) {
+				outputValue = OntologyFormatter.OutputType.LATEX_COMPLETE;
+			} else {
+				printUsage(options);
+				return;
+			}
+		} else {
+			outputValue = OntologyFormatter.OutputType.LATEX_COMPLETE;
+		}
+				
+
 		try {
-			Ontology o = new Ontology(args[0]);
-			System.out.println(OntologyFormatter.format(o, OntologyFormatter.OutputType.LATEX));
+			Ontology o = new Ontology(cmd.getArgs()[0]);
+			System.out.println(OntologyFormatter.format(o, outputValue));
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,11 +105,13 @@ public class StrigiDoc {
 	/**
 	 * Prints usage instructions to the terminal
 	 */
-	private static void printUsage() {
+	private static void printUsage(Options options) {
 		System.err.println("StrigiDoc Copyright (C) 2013 Iain R. Learmonth and contributors");
 		System.err.println("");
-		System.err.println("Usage:");
-		System.err.println("    java -jar strigidoc-*-standalone.jar URI > output.tex");
+
+		HelpFormatter f = new HelpFormatter();
+		f.printHelp("java -jar strigidoc-*-standalone.jar", options);
+
 		System.err.println("");
 	}
 
