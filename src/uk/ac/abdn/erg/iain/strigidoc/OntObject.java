@@ -36,6 +36,9 @@ public class OntObject {
 	private Set<String> sup;
 	private Set<String> sub;
 	
+	/**
+	 * Constructor for OntObject initialising the type of the object and its IRI
+	 */
 	public OntObject(OntObjectType type, String iri) {
 		this.type = type;
 		this.iri = iri;
@@ -44,46 +47,101 @@ public class OntObject {
 		sub = new HashSet<String>();
 	}
 	
+	/**
+	 * Get the object's IRI as a string
+	 *
+	 * @return the object's IRI as a string
+	 */
 	public String getIRIString() {
 		return iri;
 	}
-	
+
+	/**
+	 * Get the object type
+	 *
+	 * @return the object type
+	 */	
 	public OntObjectType getType() {
 		return type;
 	}
-	
+
+	/**
+	 * Get the label for the object
+	 *
+	 * @return the object's label or null if not set
+	 */
 	public String getLabel() {
 		return label;
 	}
 	
+	/**
+	 * Get the comment for the object
+	 *
+	 * @return the object's comment or null if not set
+	 */
 	public String getComment() {
 		return comment;
 	}
 	
+	/**
+	 * Get the set of super-object IRIs
+	 *
+	 * @return the set of super-object IRIs
+	 */
 	public Set<String> getSupers() {
 		return sup;
 	}
 	
+	/**
+	 * Get the set of sub-object IRIs
+	 *
+	 * @return the set of sub-object IRIs
+	 */
 	public Set<String> getSubs() {
 		return sub;
 	}
-	
+
+	/**
+	 * Set a label for the object, typically from a value from rdfs:label
+	 *
+	 * @param label a label for the object
+	 */	
 	public void setLabel(String label) {
 		this.label = label;
 	}
 	
+	/**
+	 * Set a comment for the object, typically a value from dc:comment
+	 *
+	 * @param the object's comment
+	 */
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 	
+	/**
+	 * Add a super-object IRI
+	 *
+	 * @param sub the super-object's IRI
+	 */	
 	public void addSuper(String sup) {
 		this.sup.add(sup);
 	}
-	
+
+	/**
+	 * Add a sub-object IRI
+	 *
+	 * @param sub the sub-object's IRI
+	 */	
 	public void addSub(String sub) {
 		this.sub.add(sub);
 	}
 	
+	/**
+	 * Get the basename of the object
+	 *
+	 * @return the basename of the object
+	 */
 	public String getFragment() {
 		if ( iri.contains("#") ) {
 			return iri.substring(iri.indexOf('#') + 1);
