@@ -50,8 +50,8 @@
                     </execution>
                 </executions>
             </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <!--<version>2.0</version> does not work with Maven 2 :( -->
                 <version>1.7.1</version>
@@ -78,7 +78,21 @@
                     </execution>
                 </executions>
             </plugin>
-    </plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.9</version>
+              <executions>
+                 <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>javadoc</goal>
+                        <goal>jar</goal>
+                    </goals>
+                 </execution>
+              </executions>
+          </plugin>
+      </plugins>
   </build>
 
   <dependencies>
