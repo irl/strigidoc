@@ -45,8 +45,8 @@ public class StrigiDoc {
 		}
 
 		try {
-			Ontology data = new Ontology(args[0]);
-			OntologyPrinter.print(data);
+			Ontology o = new Ontology(args[0]);
+			System.out.println(OntologyFormatter.format(o, OntologyFormatter.OutputType.LATEX));
 		} catch (OWLOntologyCreationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
