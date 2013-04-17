@@ -110,6 +110,18 @@ public class OntologyFormatter {
 
 	}
 
+	public static String formatAsLatexComplete(Ontology o) {
+
+		String ret = "\\documentclass{scrartcl}\n\\usepackage{url}\n\\begin{document}\n";
+
+		ret += formatAsLatex(o);
+
+		ret += "\\end{document}\n";
+
+		return ret;
+
+	}
+
 	/**
 	 * Supported output types for the formatter
 	 */
@@ -118,7 +130,11 @@ public class OntologyFormatter {
 		/**
 		 * Output as LaTeX for inclusion in a document
 		 */
-		LATEX;
+		LATEX,
+		/**
+		 * Output as complete LaTeX document
+		 */
+		LATEX_COMPLETE;
 
 	}
 
