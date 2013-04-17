@@ -65,7 +65,7 @@ public class OntObjectFormatter {
 		// Add the comment if present
 		
 		if ( o.getComment() != null ) {
-			ret += o.getComment().replaceAll("#", "\\#") + "\n\n";
+			ret += o.getComment().replaceAll("#", "\\#").replaceAll("_", "\\_") + "\n\n";
 		}
 		
 		return ret;
